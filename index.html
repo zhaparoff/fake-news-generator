@@ -1,0 +1,182 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Fake News Generator</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <script type="text/javascript">
+        var source = [
+            "проверенному источнику в министерстве обороны",
+            "достоверному источнику в правительстве РФ",
+            "неопровержимым доказательствам",
+            "снимкам со спутника",
+            "предсказаниям потомственной гадалки",
+            "недавним наблюдениям астрономов",
+            "свежим данным полученным ГУР МО РФ"
+        ];
+
+        var who = [
+            "Наркоманы",
+            "Националисты",
+            "Фашисты",
+            "Бендеровцы",
+            "Бойцы Азова",
+            "Предатели",
+            "Американцы",
+            "Сепаратисты",
+            "Сатанисты",
+            "Провокаторы",
+            "Мутанты",
+            "Ситхи"
+        ];
+        var did_what = [
+            "готовили",
+            "разрабатывали",
+            "создавали",
+            "производили"
+        ];
+        var what = [
+            "химическое оружие",
+            "бактериологическое оружие",
+            "ядерное оружие",
+            "наркотик нового поколения",
+            "грязную бомбу",
+            "беспилотники с сибирской язвой"
+        ];
+        var did_whom = [
+            "спонсировали",
+            "готовили",
+            "курировали",
+            "запускали",
+            "развивали",
+            "обучали",
+            "клонировали"
+        ];
+        var whom = [
+            "тараканов-убийц",
+            "генно-модифицированных половцев",
+            "детей-снайперов",
+            "воронов-мозгоедов",
+            "агрессивных клонов Тараса Шевченко",
+            "сотрудников МакДака",
+            "Чупакабру",
+            "боевиков Легиона Тьмы",
+            "боевых слонов",
+            "птиц зараженных бубонной чумой"
+        ];
+
+
+        function onLoad() {
+            generateTitle();
+            generate();
+        }
+
+        function generateTitle() {
+            var target = document.getElementById("title-container");
+            target.innerHTML = generateTitleCore();
+        }
+
+        function generateTitleCore() {
+            var array = new Uint16Array(1);
+            getCrypto().getRandomValues(array);
+
+            var res = "Согласно ";
+
+            var i = array[0] % source.length;
+            res += source[i];
+            res += ":";
+
+            return res;
+        }
+
+        function generate() {
+            var target = document.getElementById("word-container");
+            target.innerHTML = newsToHtmlList(generateNewsArray(5));
+        }
+
+        function generateNewsArray(count) {
+            var a = [];
+
+            for (var i = 0; i < count; i++) {
+                a.push(generateFakeCore());
+            }
+
+            return a;
+        }
+
+        function generateFakeCore() {
+            var array = new Uint16Array(4);
+            getCrypto().getRandomValues(array);
+
+            var res = "";
+
+            var i = array[0] % who.length;
+            res += who[i];
+            res += " ";
+
+            i = array[1] % 2;
+            var did = i === 1 ? did_what : did_whom;
+            var ww = i === 1 ? what : whom;
+
+            i = array[2] % did.length;
+            res += did[i];
+            res += " ";
+
+            i = array[3] % ww.length;
+            res += ww[i];
+            res += ".";
+
+            return res;
+        }
+
+        function getCrypto() {
+            var cryptoObj = window.crypto || window.msCrypto;
+
+            if (cryptoObj == null) {
+                alert("Sorry, but your browser does not support cryptography API.");
+            }
+
+            return cryptoObj;
+        }
+
+        function newsToHtmlList(news) {
+            var result = "<ul>";
+
+            news.forEach(function (p) {
+                result += "<li><samp>" + p + "</samp></li>";
+            });
+
+            result += "</ul>";
+
+            return result;
+        }
+    </script>
+</head>
+
+<body onload="onLoad();">
+    <div class="container">
+        <nav class="navbar navbar-dark bg-dark">
+            <span class="navbar-brand h1">Fake News Generator</span>
+        </nav>
+        <div class="row">
+            <div class="col-md">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 id="title-container"></h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="word-container"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

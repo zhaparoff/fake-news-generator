@@ -1,2 +1,3 @@
-# russian-news-generator
-Code that russian media use for news generation
+# Fake News Generator
+
+A code that russian media are using for news generation.
