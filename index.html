@@ -11,7 +11,9 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <script type="text/javascript">
-        var source = [
+        const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+        const source = [
             "проверенному источнику в министерстве обороны",
             "достоверному источнику в правительстве РФ",
             "неопровержимым доказательствам",
@@ -21,7 +23,7 @@
             "свежим данным полученным ГУР МО РФ"
         ];
 
-        var who = [
+        const who = [
             "Наркоманы",
             "Националисты",
             "Фашисты",
@@ -29,20 +31,20 @@
             "Бойцы Азова",
             "Предатели",
             "Американцы",
-            "Сепаратисты",
             "Сатанисты",
             "Провокаторы",
             "Мутанты",
             "Ситхи",
-            "Военные инструкторы из США"
+            "Военные инструкторы из США",
+            "Пентагоне"
         ];
-        var did_what = [
+        const did_what = [
             "готовили",
             "разрабатывали",
             "создавали",
             "производили"
         ];
-        var what = [
+        const what = [
             "химическое оружие",
             "бактериологическое оружие",
             "ядерное оружие",
@@ -50,16 +52,17 @@
             "грязную бомбу",
             "беспилотники с сибирской язвой"
         ];
-        var did_whom = [
+        const did_whom = [
             "спонсировали",
             "готовили",
             "курировали",
             "запускали",
             "развивали",
             "обучали",
-            "клонировали"
+            "клонировали",
+            "тренировали"
         ];
-        var whom = [
+        const whom = [
             "тараканов-убийц",
             "генно-модифицированных половцев",
             "детей-снайперов",
@@ -69,61 +72,66 @@
             "Чупакабру",
             "боевиков Легиона Тьмы",
             "боевых слонов",
-            "птиц зараженных бубонной чумой"
+            "птиц зараженных бубонной чумой",
+            "рои комаров-убийц"
         ];
 
 
-        function onLoad() {
+        async function onLoad() {
             generateTitle();
-            generate();
+            await generate();
         }
 
         function generateTitle() {
-            var target = document.getElementById("title-container");
+            const target = document.getElementById("title-container");
             target.innerHTML = generateTitleCore();
         }
 
         function generateTitleCore() {
-            var array = new Uint16Array(1);
+            let array = new Uint16Array(1);
             getCrypto().getRandomValues(array);
 
-            var res = "Согласно ";
+            let res = "Согласно ";
 
-            var i = array[0] % source.length;
+            const i = array[0] % source.length;
             res += source[i];
             res += ":";
 
             return res;
         }
 
-        function generate() {
-            var target = document.getElementById("word-container");
-            target.innerHTML = newsToHtmlList(generateNewsArray(3));
+        async function generate() {
+            const target = document.getElementById("word-container");
+            const news = await generateNewsArray(5);
+            target.innerHTML = newsToHtmlList(news);
         }
 
-        function generateNewsArray(count) {
-            var a = [];
+        async function generateNewsArray(count) {
+            const a = [];
+            let array = new Uint16Array(count + 1);
+            getCrypto().getRandomValues(array);
 
             for (var i = 0; i < count; i++) {
                 a.push(generateFakeCore());
+                await delay(array[i] % 100 + array[count] % 100);
             }
 
             return a;
         }
 
         function generateFakeCore() {
-            var array = new Uint16Array(4);
+            let array = new Uint16Array(4);
             getCrypto().getRandomValues(array);
 
-            var res = "";
+            let res = "";
 
-            var i = array[0] % who.length;
+            let i = array[0] % who.length;
             res += who[i];
-            res += " ";
+            res += " в Украине ";
 
             i = array[1] % 2;
-            var did = i === 1 ? did_what : did_whom;
-            var ww = i === 1 ? what : whom;
+            const did = i === 1 ? did_what : did_whom;
+            const ww = i === 1 ? what : whom;
 
             i = array[2] % did.length;
             res += did[i];
@@ -137,7 +145,7 @@
         }
 
         function getCrypto() {
-            var cryptoObj = window.crypto || window.msCrypto;
+            const cryptoObj = window.crypto || window.msCrypto;
 
             if (cryptoObj == null) {
                 alert("Sorry, but your browser does not support cryptography API.");
@@ -147,7 +155,7 @@
         }
 
         function newsToHtmlList(news) {
-            var result = "<ul>";
+            let result = "<ul>";
 
             news.forEach(function (p) {
                 result += "<li><samp>" + p + "</samp></li>";
