@@ -33,7 +33,8 @@
             "Сатанисты",
             "Провокаторы",
             "Мутанты",
-            "Ситхи"
+            "Ситхи",
+            "Военные инструкторы из США"
         ];
         var did_what = [
             "готовили",
@@ -97,7 +98,7 @@
 
         function generate() {
             var target = document.getElementById("word-container");
-            target.innerHTML = newsToHtmlList(generateNewsArray(5));
+            target.innerHTML = newsToHtmlList(generateNewsArray(3));
         }
 
         function generateNewsArray(count) {
