@@ -36,13 +36,15 @@
             "Мутанты",
             "Ситхи",
             "Военные инструкторы из США",
-            "Пентагоне"
+            "Агенты ЦРУ",
+            "Сотрудники Пентагона",
         ];
         const did_what = [
             "готовили",
             "разрабатывали",
             "создавали",
-            "производили"
+            "производили",
+            "распространяли"
         ];
         const what = [
             "химическое оружие",
@@ -60,7 +62,8 @@
             "развивали",
             "обучали",
             "клонировали",
-            "тренировали"
+            "тренировали",
+            "вербовали"
         ];
         const whom = [
             "тараканов-убийц",
@@ -68,7 +71,7 @@
             "детей-снайперов",
             "воронов-мозгоедов",
             "агрессивных клонов Тараса Шевченко",
-            "сотрудников МакДака",
+            "сотрудников KFC",
             "Чупакабру",
             "боевиков Легиона Тьмы",
             "боевых слонов",
@@ -102,42 +105,47 @@
 
         async function generate() {
             const target = document.getElementById("word-container");
-            const news = await generateNewsArray(5);
+            const news = await generateNewsArray(3);
             target.innerHTML = newsToHtmlList(news);
         }
 
         async function generateNewsArray(count) {
             const a = [];
-            let array = new Uint16Array(count + 1);
+
+            let array = new Uint16Array(count);
             getCrypto().getRandomValues(array);
 
             for (var i = 0; i < count; i++) {
                 a.push(generateFakeCore());
-                await delay(array[i] % 100 + array[count] % 100);
+                await delay(array[i] % 37 + 13);
             }
 
             return a;
         }
 
         function generateFakeCore() {
-            let array = new Uint16Array(4);
-            getCrypto().getRandomValues(array);
+            let res = "";            
 
-            let res = "";
+            let array = new Uint16Array(1);
+            const crypto = getCrypto();
 
+            crypto.getRandomValues(array);
             let i = array[0] % who.length;
             res += who[i];
             res += " в Украине ";
 
-            i = array[1] % 2;
+            crypto.getRandomValues(array);
+            i = array[0] % 2;
             const did = i === 1 ? did_what : did_whom;
             const ww = i === 1 ? what : whom;
 
-            i = array[2] % did.length;
+            crypto.getRandomValues(array);
+            i = array[0] % did.length;
             res += did[i];
             res += " ";
 
-            i = array[3] % ww.length;
+            crypto.getRandomValues(array);
+            i = array[0] % ww.length;
             res += ww[i];
             res += ".";
 
